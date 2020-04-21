@@ -1,0 +1,215 @@
+[
+  {
+    "instructions": [
+      "Step 1",
+      "Step 2"
+    ],
+    "servings": "2",
+    "recipeId": "abcd1",
+    "cookTime": "10",
+    "userId": "eu-west-1:1234abcd",
+    "attachment": "image1.png",
+    "createdAt": 12345678,
+    "ingredients": [
+      {
+        "id": 1111,
+        "item": "Pasta",
+        "measurement": "g",
+        "quantity":100,
+        "gotten":false,
+        "price":0
+      },
+      {
+        "id":2222,
+        "item": "Sauce",
+        "measurement": "ml",
+        "quantity":200,
+        "gotten":false,
+        "price":0
+      }
+    ],
+    "tags": [
+      "Tag1",
+      "Tag2",
+      "Tag3"
+    ],
+    "title": "Pasta Dish"
+  },
+  {
+    "instructions": [
+      "Step 1",
+      "Step 2"
+    ],
+    "servings": "2",
+    "recipeId": "abcd2",
+    "cookTime": "5",
+    "userId": "eu-west-1:1234abcd",
+    "attachment": "image1.png",
+    "createdAt": 12345678,
+    "ingredients": [
+      {
+        "id": 3333,
+        "item": "Pasta",
+        "measurement": "g",
+        "quantity":100,
+        "gotten":false,
+        "price":0
+      },
+      {
+        "id":4444,
+        "item": "Sauce",
+        "measurement": "ml",
+        "quantity":23,
+        "gotten":false,
+        "price":0
+      }
+    ],
+    "tags": [
+      "Tag1",
+      "Tag again"
+    ],
+    "title": "Pasta Casta"
+  },
+  {
+    "instructions": [
+      "Do this",
+      "Do that"
+    ],
+    "servings": "3",
+    "recipeId": "abcd3",
+    "cookTime": "10",
+    "userId": "eu-west-1:1234abcd",
+    "attachment": "image1.png",
+    "createdAt": 12345678,
+    "ingredients": [
+      {
+        "id":5555,
+        "item": "Rice",
+        "measurement": "g",
+        "quantity":53,
+        "gotten":false,
+        "price":0
+      },
+      {
+        "id":6666,
+        "item": "Sauce",
+        "measurement": "ml",
+        "quantity":703,
+        "gotten":false,
+        "price":0
+      }
+    ],
+    "tags": [
+      "First tag",
+      "Second"
+    ],
+    "title": "Rice and Sauce"
+  },
+  {
+    "instructions": [
+      "Slice Tomatoes",
+      "Grind second",
+      "Fry the tomatoes",
+      "Boil the Rice"
+    ],
+    "servings": "4",
+    "recipeId": "abcd4",
+    "cookTime": "13",
+    "userId": "eu-west-1:1234abcd",
+    "attachment": "image1.png",
+    "createdAt": 12345678,
+    "ingredients": [
+      {
+        "id":7777,
+        "item": "Spagetti",
+        "measurement": "kg",
+        "quantity":0.5,
+        "gotten":false,
+        "price":0
+      },
+      {
+        "id":8888,
+        "item": "Tomatoes",
+        "measurement": "kg",
+        "quantity":0.2,
+        "gotten":false,
+        "price":0
+      }
+    ],
+    "tags": [
+      "First tag",
+      "Second tag"
+    ],
+    "title": "Spagetti Dish"
+  },
+  {
+    "instructions": [
+      "Step 1",
+      "Step 2"
+    ],
+    "servings": "2",
+    "recipeId": "abcd5",
+    "cookTime": "2",
+    "userId": "eu-west-1:1234abcd",
+    "attachment": "image1.png",
+    "createdAt": 12345678,
+    "ingredients": [
+      {
+        "id":9999,
+        "item": "Beans",
+        "measurement": "g",
+        "quantity":110,
+        "gotten":false,
+        "price":0
+      },
+      {
+        "id":1010,
+        "item": "Sauce",
+        "measurement": "ml",
+        "quantity":80,
+        "gotten":true,
+        "price":10
+      }
+    ],
+    "tags": [
+      "Tag1",
+      "Tag2"
+    ],
+    "title": "Beans Soup"
+  },
+  {
+    "instructions": [
+      "Step 1",
+      "Step 2"
+    ],
+    "servings": "2",
+    "recipeId": "abcd6",
+    "cookTime": "7",
+    "userId": "eu-west-1:1234abcd",
+    "attachment": "image1.png",
+    "createdAt": 12345678,
+    "ingredients": [
+      {
+        "id":1011,
+        "item": "Pomp",
+        "measurement": "g",
+        "quantity":100,
+        "gotten":true,
+        "price":40
+      },
+      {
+        "id":1012,
+        "item": "Beans",
+        "measurement": "ml",
+        "quantity":300,
+        "gotten":false,
+        "price":0
+      }
+    ],
+    "tags": [
+      "Tag1",
+      "Tag2"
+    ],
+    "title": "Pomb Meal"
+  }
+]
