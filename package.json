@@ -27,13 +27,14 @@
     "uid": "^1.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node server.js",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "predeploy:prod": "REACT_APP_STAGE=prod npm run build",
     "deploy:prod": "aws s3 sync build/ s3://food-buddy-react-client-prod --delete",
     "postdeploy:prod": "aws cloudfront create-invalidation --distribution-id E149Y4V7TKV873 --paths '/*'",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
