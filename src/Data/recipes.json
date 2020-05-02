@@ -51,7 +51,7 @@
         "id": 3333,
         "item": "Pasta",
         "measurement": "g",
-        "quantity":100,
+        "quantity":130,
         "gotten":false,
         "price":0
       },
@@ -158,7 +158,7 @@
         "id":9999,
         "item": "Beans",
         "measurement": "g",
-        "quantity":110,
+        "quantity":80,
         "gotten":false,
         "price":0
       },
@@ -200,7 +200,7 @@
       {
         "id":1012,
         "item": "Beans",
-        "measurement": "ml",
+        "measurement": "g",
         "quantity":300,
         "gotten":false,
         "price":0

@@ -1,146 +1,278 @@
 import React from 'react';
+import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
+import 'react-vertical-timeline-component/style.min.css';
+import uuid from 'uuid';
+
 import Container from '@material-ui/core/Container';
+import KitchenIcon from '@material-ui/icons/Kitchen';
 
-import Scheduler, {Resource} from 'devextreme-react/scheduler';
-import Query from "devextreme/data/query";
-import notify from 'devextreme/ui/notify';
+import FullScreenDialog from '../Components/MenuComponents/FullScreenDialog';
 
-import { recipesData, data, priorityData } from '../Libs/ApiLib';
-import AppointmentTemplate from '../Components/MenuComponents/AppointmentTemplate';
+import {getMenuList} from '../Libs/ApiLib';
+import defaultImage from '../Data/defaultImage.jpg'
+import selectRecipe from '../Data/selectRecipe.jpg'
 
-const currentDate = new Date();
-const views = [{type:'timelineMonth',maxAppointmentsPerCell:1}]
-const groups = ['priority'];
 
-function Menu(){
+export default function Menu(props){
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+  var now = new Date();
+  const [firstDay, setFirstDay] = React.useState(new Date(now.setDate(now.getDate() - now.getDay()+1)))
+  const [lastDay, setLastDay] = React.useState(new Date(now.setDate(now.getDate() - now.getDay()+7)))
+  const [sevenDays, setSevenDays] = React.useState([]);
+  const { recipeList } = props;
+  const [menuList, setMenuList] = React.useState(getMenuList());
   
-    React.useEffect(() => {
-      processData();
-    },[data]);
- 
-    const onContentReady = (e) => {
-      const currentHour = new Date().getHours() - 1;
-      e.component.scrollToTime(currentHour, 30, new Date());
+
+  React.useEffect(() => {
+    get7Days();
+  },[firstDay, lastDay, menuList]);
+
+  const dateRange = () => {
+    const fd = {
+      month: months[firstDay.getMonth()],
+      date: firstDay.getDate(),
+      year: firstDay.getFullYear()
+    }
+    const ld = {
+      month: months[lastDay.getMonth()],
+      date: lastDay.getDate(),
+      year: lastDay.getFullYear()
     }
 
-    function getRecipesById(id) {
-      return Query(recipesData).filter(['id', id]).toArray()[0];
-    }
-
-    function onAppointmentFormOpening(data) {
-      let form = data.form,
-        recipeInfo = getRecipesById(data.appointmentData.recipeId) || {},
-        startDate = data.appointmentData.startDate;
-  
-      form.option('items', [{
-        label: {
-          text: 'Recipe'
-        },
-        editorType: 'dxSelectBox',
-        dataField: 'recipeId',
-        editorOptions: {
-          items: recipesData,
-          displayExpr: 'text',
-          valueExpr: 'id'
-        },
-      },
-      {
-        dataField: 'startDate',
-        editorType: 'dxDateBox',
-        editorOptions: {
-          width: '100%',
-          type: 'datetime'
-        }
-      }, {
-        name: 'endDate',
-        dataField: 'endDate',
-        editorType: 'dxDateBox',
-        editorOptions: {
-          width: '100%',
-          type: 'datetime',
-          readOnly: true
-        }
-      }
-      ]);
-    }
-
-    //make appointment data contain text
-    const processData = () => {
-      for (let i = 0; i < data.length; i++) {
-        for (let j = 0; j < recipesData.length; j++) {
-          if(data[i].recipeId === recipesData[j].recipeId ){
-            data[i].text = recipesData[j].title;
-          }
-        }
-      }
-      return data;
-    }
-
-    const showToast = (event, value, type) => {
-      notify(`${event} "${value}" recipe`, type, 800);
-    }
-
-    // this function is maint to add a 'text' property to the appointment data -> 'data'
-    const findRecipeText = (appData) => {
-       const index = recipesData.findIndex((r) => r.recipeId === appData.recipeId);
-       appData.text = recipesData[index].title;
-    }
-
-    const handleAppointmentAdd = (e) => {
-      findRecipeText(e.appointmentData)
-      data[data.length - 1] = e.appointmentData;
-      showToast('Added', e.appointmentData.text, 'success');
-    }
-  
-    const showUpdatedToast = (e) => {
-      findRecipeText(e.appointmentData)
-      showToast('Updated', e.appointmentData.text, 'info');
-      console.log(e.appointmentData.text);
-    }
-  
-    const handleAppointmentDelete = (e) => {
-      findRecipeText(e.appointmentData)
-      console.log(data);
-      showToast('Deleted', e.appointmentData.text, 'warning');
+    if(fd.month === ld.month){
+      return (
+      <h1>{`${fd.month} (${fd.date} - ${ld.date}) / ${ld.year}`}</h1>
+      )
     }
 
     return (
-      <Container style={{marginTop:'110px', marginBottom:'70px'}}>
-        <Scheduler
-          dataSource={data}
-          views= {views}
-          defaultCurrentView="timelineMonth"
-          defaultCurrentDate={currentDate}
-          showCurrentTimeIndicator={true}
-          shadeUntilCurrentTime={true}
-          height={580}
-          groups={groups}
-          editing={{ allowDragging: true }}
-          appointmentRender={AppointmentTemplate}
-          onContentReady={onContentReady}
-          onAppointmentFormOpening={onAppointmentFormOpening}
-          onAppointmentAdded={handleAppointmentAdd}
-          onAppointmentUpdated={showUpdatedToast}
-          onAppointmentDeleted={handleAppointmentDelete}
-        >
-          <Resource
-            fieldExpr="recipeId"
-            allowMultiple={false}
-            dataSource={recipesData}
-            label="Recipe"
-            useColorAsDefault={ true }
-          />
-          <Resource
-            fieldExpr="priority"
-            allowMultiple={false}
-            dataSource={priorityData}
-            label="Priority"
-          />
-        </Scheduler>
-      </Container>
+      <h1>{`${fd.month} ${fd.date} - ${ld.month} ${ld.date} / ${ld.year}`}</h1>
     )
+  }
 
+  const get7Days = () => {
+    var curr = new Date();
+    const sd = []
+    for(let i = 1; i <= days.length; i++){
+      const date = new Date(curr.setDate(curr.getDate() - curr.getDay()+i));
+      const rd = {
+        month: months[date.getMonth()],
+        day: days[date.getDay()],
+        date: date.getDate()
+      }
+      sd.push(rd);
+    }
+    setSevenDays(sd)
+  }
+  
+  const handleSelectRecipe = (name, meal) => {
+    var newMeal = {}
+    if(meal.mealType === 0){
+      if(meal.breakfast){
+        meal.breakfast.recipe = name;
+        newMeal = meal.breakfast; 
+      } else {
+        newMeal = {
+          id:uuid(),
+          recipe:name,
+          type:'BreakFast',
+          dateInfo: meal.dateInfo
+        }
+      }
+    }
+    if(meal.mealType === 1){
+      if(meal.launch){
+        meal.launch.recipe = name;
+        newMeal = meal.launch; 
+      } else {
+        newMeal = {
+        id:uuid(),
+        recipe:name,
+        type:'Launch',
+          dateInfo: meal.dateInfo
+        }
+      }
+    }
+    if(meal.mealType === 2){
+      if(meal.supper){
+        meal.supper.recipe = name;
+        newMeal = meal.supper; 
+      } else {
+        newMeal = {
+          id:uuid(),
+          recipe:name,
+          type:'Supper',
+          dateInfo: meal.dateInfo
+        }
+      }
+    } 
+
+    const index = menuList.findIndex((m) => m.id === newMeal.id)
+    if(index > 0){
+      const ml = {...menuList}
+      ml[index] = newMeal;
+      setMenuList([]);
+      console.log(menuList);
+    } 
+    // else {
+    //   setMenuList({...menuList, newMeal})
+    // }
+  }
+
+  return (
+    <Container style={{marginTop:'100px'}}>
+        <center>{dateRange()}</center>
+        <VerticalTimeline >
+          {
+            sevenDays.map((d, i) => {
+              const n = new Date();
+              const check = (days[n.getDay()] === d.day ? true : false);
+              const date = (f) => {
+                if(check)
+                  return <span style={{color:'red'}}>{f}</span>
+                else return <span>{f}</span>
+              }
+              const meal = {}
+
+              menuList.map((menu, j) => {
+                const pmenu = {
+                  month: months[menu.dateInfo.month],
+                  day: days[menu.dateInfo.day],
+                  date: menu.dateInfo.date
+                }
+                if(pmenu.month === d.month && pmenu.date === d.date){
+                  if(menu.type === "BreakFast"){
+                    meal.breakfast = menu
+                  } else if(menu.type === "Launch"){
+                    meal.launch = menu
+                  } else {
+                    meal.supper = menu
+                  }
+                }
+                  meal.dateInfo = {
+                    month: months.indexOf(d.month),
+                    day: days.indexOf(d.day),
+                    date: d.date
+                  }
+              })
+
+              return (
+                <React.Fragment key={i}>
+                  <VerticalTimelineElement
+                    className="vertical-timeline-element--work"
+                    date={date('Break Fast')}
+                    iconStyle={{  background: 'rgb(34, 76, 26)', color: '#fff' }}
+                    icon={<KitchenIcon />}
+                  >
+                    {
+                        check 
+                        ? (
+                          <React.Fragment>
+                            <h1 style={{color:'green'}}>{`${d.day} - ${d.date}`}</h1>
+                            <h2 className="vertical-timeline-element-title">
+                              {
+                                meal.breakfast ? meal.breakfast.recipe : 'Select Recipe!!'
+                              }  
+                            </h2><br />
+                          </React.Fragment>
+                        )
+                        : (
+                          <React.Fragment>
+                            <h1 style={{color:'lightgrey'}} >{`${d.day} - ${d.date}`}</h1>
+                            <h2 style={{color:'lightgrey'}} className="vertical-timeline-element-title">
+                              {
+                                meal.breakfast ? meal.breakfast.recipe : 'Select Recipe!!'
+                              }    
+                            </h2><br />
+                          </React.Fragment>
+                        )
+                    }
+                    {
+                      meal.breakfast 
+                      ? (<img style={{height:'auto', width:'100%'}} alt='no-image' src={defaultImage} />)
+                      : <img style={{height:'auto', width:'100%'}} alt='no-image' src={selectRecipe} />
+                    }
+                    <FullScreenDialog  meal={meal} mealType={0} selectRecipe={handleSelectRecipe} recipeList={recipeList} />
+                  </VerticalTimelineElement>
+                  <VerticalTimelineElement
+                    className="vertical-timeline-element--work"
+                    date={date('Launch')}
+                    iconStyle={{  background: 'rgb(34, 76, 26)', color: '#fff' }}
+                    // icon={<KitchenIcon />}
+                  >
+                    {
+                        check 
+                        ? (
+                          <React.Fragment>
+                            <h2 className="vertical-timeline-element-title">
+                              {
+                                meal.launch ? meal.launch.recipe : 'Select Recipe!!'
+                              }  
+                            </h2><br />
+                          </React.Fragment>
+                        )
+                        : (
+                          <React.Fragment>
+                            <h2 style={{color:'lightgrey'}} className="vertical-timeline-element-title">
+                              {
+                                meal.launch ? meal.launch.recipe : 'Select Recipe!!'
+                              }   
+                            </h2><br />
+                          </React.Fragment>
+                        )
+                    }
+                    {
+                      meal.launch 
+                      ? (<img style={{height:'auto', width:'100%'}} alt='no-image' src={defaultImage} />)
+                      : <img style={{height:'auto', width:'100%'}} alt='no-image' src={selectRecipe} />
+                    }
+                    <FullScreenDialog  meal={meal} mealType={1} selectRecipe={handleSelectRecipe} recipeList={recipeList} />
+                  </VerticalTimelineElement>
+                  <VerticalTimelineElement
+                    className="vertical-timeline-element--work"
+                    date={date('Supper')}
+                    iconStyle={{  background: 'rgb(34, 76, 26)', color: '#fff'}}
+                    // icon={<KitchenIcon />}
+                  >
+                    {
+                        check 
+                        ? (
+                          <React.Fragment>
+                            <h2 className="vertical-timeline-element-title">
+                              {
+                                meal.supper ? meal.supper.recipe : 'Select Recipe!!'
+                              } 
+                            </h2><br />
+                          </React.Fragment>
+                        )
+                        : (
+                          <React.Fragment>
+                            <h2 style={{color:'lightgrey'}} className="vertical-timeline-element-title">
+                              {
+                                meal.supper ? meal.supper.recipe : 'Select Recipe!!'
+                              }   
+                            </h2><br />
+                          </React.Fragment>
+                        )
+                    }
+                    {
+                      meal.supper 
+                      ? (<img style={{height:'auto', width:'100%'}} alt='no-image' src={defaultImage} />)
+                      : <img style={{height:'auto', width:'100%'}} alt='no-image' src={selectRecipe} />
+                    }
+                    <FullScreenDialog  meal={meal} mealType={2} selectRecipe={handleSelectRecipe} recipeList={recipeList} />
+                  </VerticalTimelineElement>
+                </React.Fragment>
+              )
+            })
+          }
+
+          <VerticalTimelineElement
+            iconStyle={{ background: 'rgb(34, 76, 26)', color: '#fff' }}
+            icon={<KitchenIcon />}
+          />
+        </VerticalTimeline>
+    </Container>
+  )
 }
-
-
-export default Menu;

@@ -5,9 +5,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import Theme from "./Theme";
 import uid from 'uid';
+import Notification from './Notification';
+import notify from 'devextreme/ui/notify';
 
 import { 
   getRecipeList,
+  getAllIngredients,
   addRecipe, 
   updateRecipe, 
   updateIngredient, 
@@ -25,14 +28,16 @@ const App = () => {
   const [currUser, setCurrUser] = useState(null);
   const [currUserInfo, setCurrUserInfo] = useState(null);
   const [recipeList, setRecipeList] = useState(null);
+  const [ingredientList, setIngredientList] = useState(null);
 
   React.useEffect(() => {
     onLoad();
   }, []);
 
   async function onLoad() {
-    // set recipes
+    // set recipes and ingredients
     setRecipeList(getRecipeList());
+    setIngredientList(getAllIngredients());
     
     try {
       setCurrUser(await Auth.currentSession());
@@ -51,6 +56,10 @@ const App = () => {
     }
 
     setIsAuthenticating(false);
+  }
+
+  const showToast = (event, value, type) => {
+    notify(`${event} "${value}" recipe`, type, 800);
   }
 
   // function to add recipe
@@ -72,51 +81,31 @@ const App = () => {
     // updateRecipe(recipe) from api backend
   }
 
-  // function to update incredient
-  const handleUpdateIngredient = (oldIngredient, newIngredient) => {
-    // loop through recipeList
-    for(let i = 0; i < recipeList.length; i++){
+  // function to update ingredient
+  const handleUpdateIngredient = (newIngredient) => {
+    // loop through ingredientList
+    for(let i = 0; i < ingredientList.length; i++){
       // find recipe where ingredient is from
-      if(newIngredient.recipeId === recipeList[i].recipeId){
-          const ingredients = recipeList[i].ingredients;
-          ingredients[ingredients.indexOf(oldIngredient)] = newIngredient;
-          recipeList[i].ingredients = ingredients;
-          setRecipeList(recipeList)
-
+      if(newIngredient.id === ingredientList[i].id){
+          newIngredient.gotten = true;
+          setIngredientList(ingredientList.filter((row, j) => row.id !== newIngredient.id));
           // updateIngredient(old, new)
       }
     }
   }
 
-  const handleDeleteIngredient = (ingredient) => {
-     // loop through recipeList
-     for(let i = 0; i < recipeList.length; i++){
-      // find recipe where ingredient is from
-      if(ingredient.recipeId === recipeList[i].recipeId){
-          const ingredients = recipeList[i].ingredients;
-          ingredients.splice(ingredients.indexOf(ingredient), 1);
-          recipeList[i].ingredients = ingredients;
-          setRecipeList(recipeList)
-
-          // deleteIngredient(ingredient) from backend api
+   // function to handle ingredient deleting
+  const handleDeleteIngredient = (ingredient, index) => {
+      const repeatedIngId = ingredient.ids;
+      if(repeatedIngId.length > 0){
+          for (let j = 0; j < repeatedIngId.length; j++) {
+            setIngredientList(ingredientList.filter(row => row.id !== repeatedIngId[j]))
+          }
+      } else {
+        setIngredientList(ingredientList.filter((row, j) => row.id !== ingredient.id));
+        // showToast('Deleted', ingredient.item, 'success');
       }
-    }
-  }
-
-  // function to handle incredient deleting
-  const handleSaveToPantry = (ingredient) => {
-    // loop through recipeList
-    for(let i = 0; i < recipeList.length; i++){
-      // find recipe where ingredient is from
-      if(ingredient.recipeId === recipeList[i].recipeId){
-          const ingredients = recipeList[i].ingredients;
-          ingredients[ingredients.indexOf(ingredient)].gotten = true;
-          recipeList[i].ingredients = ingredients;
-          setRecipeList(recipeList)
-          
-          // saveToPantry(ingredient) from backend api
-      }
-    }
+      // setIngredientList(rows => ingredientList.filter((row, j) => j !== i));
   }
 
   return (
@@ -124,7 +113,7 @@ const App = () => {
     <React.Fragment>
       <MuiThemeProvider theme={Theme}>
         <CssBaseline />
-        <Routes appProps={{ isAuthenticated, userHasAuthenticated, currUser, setCurrUser, currUserInfo, setCurrUserInfo, recipeList, setRecipeList, handleAddRecipe, handleUpdateRecipe, handleUpdateIngredient, handleSaveToPantry, handleDeleteIngredient }} />
+        <Routes appProps={{ isAuthenticated, userHasAuthenticated, currUser, setCurrUser, currUserInfo, setCurrUserInfo, recipeList, setRecipeList, ingredientList, setIngredientList, handleAddRecipe, handleUpdateRecipe, handleUpdateIngredient, handleDeleteIngredient }} />
       </MuiThemeProvider>
     </React.Fragment>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router-dom';
+import {  fade, makeStyles } from '@material-ui/core/styles';
 import { getRecipeList, updateRecipe, createRecipe } from "../Libs/ApiLib";
 import { s3Upload, s3Get } from '../Libs/StorageLib';
 
@@ -7,12 +8,17 @@ import RecipeList from "../Components/RecipeList";
 import RecipeCard from "../Components/RecipeCard";
 import RecipeFab from '../Components/RecipeFab';
 import EmptyRecipe from "../Components/EmptyRecipe";
+import Search from '../Components/Search';
 
 import Container from '@material-ui/core/Container';
-
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
+import SearchIcon from '@material-ui/icons/Search';
+import Typography from '@material-ui/core/Typography';
+import InputBase from '@material-ui/core/InputBase';
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -20,11 +26,12 @@ const useStyles = makeStyles(theme => ({
     bottom: theme.spacing(2),
     right: theme.spacing(2),
     zIndex: 1
-  }
+  },
 }));
 
 export default function Recipes({ recipeList, setRecipeList, isAuthenticated, handleAddRecipe, handleUpdateRecipe, ...props } ){
   const classes = useStyles();
+  const history = useHistory();
 
   const recipeId = props.match.params.id;
   const [selectedRecipe, setSelectedRecipe] = useState(null);
@@ -77,8 +84,6 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ha
       setRecipeList(result);
     });
   }
-
-
 
 // Fab interactions
   const handleFabClick = async (event) => {
@@ -145,8 +150,22 @@ export default function Recipes({ recipeList, setRecipeList, isAuthenticated, ha
     }
   ]
 
+  const goback = () => {
+    history.push('/Recipes')
+  }
+
   return(
     <Container style={{marginTop:'100px', marginBottom:'50px'}}>
+      {
+      recipeId ? 
+        (
+          <Button onClick={() => goback()} color="secondary" variant="contained">
+            <ArrowBackIcon />
+          </Button> 
+        )
+        : <Search recipeList={recipeList} setRecipeList={setRecipeList} />
+      }
+      
       <RecipeFab handleClick={handleFabClick} fabs={fabs} value={fabValue}/>
       {selectedRecipe
         ?<RecipeCard recipe={selectedRecipe} setRecipe={setSelectedRecipe} attachment={attachment} setAttachment={setAttachment} expanded editable={isEditable} />

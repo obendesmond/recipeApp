@@ -15,7 +15,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-import RecipeDefault from "../Res/Img/RecipeDefault.jpg";
+import RecipeDefault from "./RecipeDefault.jpg";
 
 const useStyles = makeStyles(theme=>({
   card:{
@@ -65,7 +65,7 @@ export default ({ isEditable, recipe, setRecipe, attachment, setAttachment, ...p
       }
       <CardMedia
         className={classes.media}
-        image={attachment ? attachment :RecipeDefault}
+        image={/*attachment ? attachment :*/RecipeDefault}
         title="Recipe Image"
       />
       <RecipeBasicInfo editable={isEditable} setRecipeData={setRecipe} recipeData={recipe}/>

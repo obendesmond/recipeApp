@@ -1,20 +1,33 @@
 export const preventDefault = event => event.preventDefault();
 
-export const onLoad = (recipeList, setIngredients, state, setState, gotten) => {
-    const ing = []
-    for (let i = 0; i < recipeList.length; i++) {
-        for (let j = 0; j < recipeList[i].ingredients.length; j++) {
-            // if ingredient is not gotten
-            if(recipeList[i].ingredients[j].gotten === gotten){
-                // include a "recipe and recipeId" element in every ingredient
-                recipeList[i].ingredients[j].recipe = recipeList[i].title;
-                recipeList[i].ingredients[j].recipeId = recipeList[i].recipeId;
+export const onLoad = (ingredientList, setRows, gotten) => {
+    const ings = [];
+    const foundIngs = [];
+    for (let i = 0; i < ingredientList.length; i++) {
+        if(ingredientList[i].gotten === gotten){
 
-                ing.push(recipeList[i].ingredients[j]);
+            ingredientList[i].ids = [ingredientList[i].id];
+            // check if ingredient already exists
+            const found = ings.some(eng => eng.item === ingredientList[i].item);
+            if(!found) ings.push(ingredientList[i]);
+            else {
+                // add an ids property to repeated ingredients
+                foundIngs.push(ingredientList[i]);
             }
         }
     }
-    setIngredients(ing);
+
+    // add the item qty
+    ings.forEach(ing => { 
+        foundIngs.forEach(fi => {
+            if(ing.item === fi.item){
+                ing.ids.push(fi.id);
+                ing.quantity = ing.quantity + fi.quantity
+                // foundIngs.splice(foundIngs.indexOf(fi), 1);
+            }  
+        })
+    });
+
     // set data to be ingredients
-    setState({...state, data:ing})
+    setRows(ings)
 }

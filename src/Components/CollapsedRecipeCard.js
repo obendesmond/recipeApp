@@ -9,7 +9,7 @@ import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActionArea from '@material-ui/core/CardActionArea';
 
-import RecipeDefault from "../Res/Img/RecipeDefault.jpg";
+import RecipeDefault from "./RecipeDefault.jpg";
 
 const useStyles = makeStyles(theme=>({
   card:{
@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme=>({
 
 export default ({ recipe }) => {
   const classes = useStyles();
+  const attachment = recipe.attachment;
 
   return(
     <Card className={classes.card} raised>
@@ -37,7 +38,7 @@ export default ({ recipe }) => {
         <RouteLink className={classes.link} to={`/Recipes/${recipe.recipeId}`}>
           <CardMedia
             className={classes.media}
-            image={recipe.attachment ? recipe.attachment :RecipeDefault}
+            image={/*attachment ? attachment :*/RecipeDefault}
             title="Recipe Image"
           />
           <RecipeBasicInfo recipeData={recipe}/>

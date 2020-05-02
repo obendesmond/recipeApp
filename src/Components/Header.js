@@ -115,6 +115,28 @@ export default ({ appProps }) => {
 
   const [value, setValue] = React.useState(0);
 
+  
+  React.useEffect(() => {
+    
+    switch (window.location.pathname) {
+      case '/Recipes':
+        setValue(0);
+        break;
+      case '/Menu':
+        setValue(1);
+        break;
+      case '/Pantry':
+        setValue(2);
+        break;
+      case '/Shopping':
+        setValue(3);
+        break;
+      default:
+        setValue(-1);
+        break;
+    }
+  });
+
   const pageList = ['Recipes', 'Menu', 'Pantry', 'Shopping'];
 
   const toggleDrawer = event => {
@@ -191,10 +213,10 @@ export default ({ appProps }) => {
           </Avatar>
         </Badge>
         <Typography className={classes.typography} variant="body1">
-          {appProps.currUserInfo.attributes.given_name + " " + appProps.currUserInfo.attributes.family_name}
+          {appProps.currUserInfo ? appProps.currUserInfo.attributes.given_name + " " + appProps.currUserInfo.attributes.family_name : 'John Doe'}
         </Typography>
         <Typography className={classes.typography} variant="body2">
-          {appProps.currUserInfo.attributes.email}
+          {appProps.currUserInfo ? appProps.currUserInfo.attributes.email : 'johndoe@gmail.com'}
         </Typography>
         <Divider className={classes.divider}  variant="middle"/>
         {/*<Button className={classes.button}>Change Password</Button>*/}
