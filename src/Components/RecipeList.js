@@ -2,17 +2,23 @@ import React from "react";
 
 import MasonryGrid from "../Components/MasonryGrid";
 import RecipeCard from "../Components/RecipeCard";
+import Grid from '@material-ui/core/Grid';
 
 const RecipeList = ({ recipeList, appProps }) => {
 
   if(!recipeList)return null;
 
   return(
-    <MasonryGrid>
-      {recipeList.map((recipe) =>
-        <RecipeCard key={recipe.recipeId} recipe={recipe} appProps={appProps}/>
+    // <MasonryGrid>
+    <Grid container spacing={3}>
+      {recipeList.map((recipe) => (
+        <Grid item md={4} sm={12} key={recipe.recipeId}>
+          <RecipeCard  recipe={recipe} appProps={appProps}/>
+        </Grid>
+      )
       )}
-    </MasonryGrid>
+    </Grid>
+    // </MasonryGrid>
   );
 }
 

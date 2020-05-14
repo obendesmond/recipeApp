@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Search(props) {
     const classes = useStyles();
-    const { handleSearch,} = props;
+    const { handleSearch, searchTxt} = props;
     
 
   return (
@@ -80,7 +80,8 @@ export default function Search(props) {
               input: classes.inputInput
             }}
             inputProps={{ "aria-label": "search" }}
-            onChange = {handleSearch}
+            value={searchTxt}
+            onChange = {(e) => handleSearch(e)}
           />
         </div>
       </Toolbar>

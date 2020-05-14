@@ -11,6 +11,7 @@ import notify from 'devextreme/ui/notify';
 import { 
   getRecipeList,
   getAllIngredients,
+  getMenuList,
   addRecipe, 
   updateRecipe, 
   updateIngredient, 
@@ -29,6 +30,7 @@ const App = () => {
   const [currUserInfo, setCurrUserInfo] = useState(null);
   const [recipeList, setRecipeList] = useState(null);
   const [ingredientList, setIngredientList] = useState(null);
+  const [menuList, setMenuList] = React.useState(null);
 
   React.useEffect(() => {
     onLoad();
@@ -38,6 +40,7 @@ const App = () => {
     // set recipes and ingredients
     setRecipeList(getRecipeList());
     setIngredientList(getAllIngredients());
+    setMenuList(getMenuList());
     
     try {
       setCurrUser(await Auth.currentSession());
@@ -88,7 +91,14 @@ const App = () => {
       // find recipe where ingredient is from
       if(newIngredient.id === ingredientList[i].id){
           newIngredient.gotten = true;
-          setIngredientList(ingredientList.filter((row, j) => row.id !== newIngredient.id));
+          ingredientList.map((e,i) => {
+            if(e.id === newIngredient.id){
+              return e = newIngredient; 
+            } else {
+              return e;
+            }
+          })
+          // setIngredientList(ingredientList.filter((row, j) => row.id !== newIngredient.id));
           // updateIngredient(old, new)
       }
     }
@@ -113,7 +123,7 @@ const App = () => {
     <React.Fragment>
       <MuiThemeProvider theme={Theme}>
         <CssBaseline />
-        <Routes appProps={{ isAuthenticated, userHasAuthenticated, currUser, setCurrUser, currUserInfo, setCurrUserInfo, recipeList, setRecipeList, ingredientList, setIngredientList, handleAddRecipe, handleUpdateRecipe, handleUpdateIngredient, handleDeleteIngredient }} />
+        <Routes appProps={{ isAuthenticated, userHasAuthenticated, currUser, setCurrUser, currUserInfo, setCurrUserInfo, recipeList, setRecipeList, ingredientList, setIngredientList, handleAddRecipe, handleUpdateRecipe, handleUpdateIngredient, handleDeleteIngredient, menuList, setMenuList }} />
       </MuiThemeProvider>
     </React.Fragment>
   );

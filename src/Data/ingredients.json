@@ -3,7 +3,7 @@
         "id": 1,
         "item": "Pasta",
         "measurement": "g",
-        "quantity":100,
+        "quantity":"100g",
         "gotten":false,
         "price":0
     },
@@ -11,7 +11,7 @@
     "id":2,
     "item": "Sauce",
     "measurement": "ml",
-    "quantity":200,
+    "quantity":"200ml",
     "gotten":false,
     "price":0
     },
@@ -19,7 +19,7 @@
         "id": 3,
         "item": "Samley",
         "measurement": "g",
-        "quantity":130,
+        "quantity":"130g",
         "gotten":false,
         "price":0
     },
@@ -27,7 +27,7 @@
         "id":4,
         "item": "Keron",
         "measurement": "ml",
-        "quantity":23,
+        "quantity":"23ml",
         "gotten":false,
         "price":0
     },
@@ -35,7 +35,7 @@
         "id":5,
         "item": "Rice",
         "measurement": "g",
-        "quantity":53,
+        "quantity":"53g",
         "gotten":false,
         "price":0
     },
@@ -43,7 +43,7 @@
         "id":6,
         "item": "GreenSpice",
         "measurement": "ml",
-        "quantity":703,
+        "quantity":"703ml",
         "gotten":false,
         "price":0
     },
@@ -51,7 +51,7 @@
         "id":7,
         "item": "Spagetti",
         "measurement": "kg",
-        "quantity":0.5,
+        "quantity":"0.5kg",
         "gotten":false,
         "price":0
     },
@@ -59,7 +59,7 @@
         "id":8,
         "item": "Tomatoes",
         "measurement": "kg",
-        "quantity":0.2,
+        "quantity":"0.2kg",
         "gotten":false,
         "price":0
     },
@@ -67,7 +67,7 @@
         "id":9,
         "item": "Beans",
         "measurement": "g",
-        "quantity":80,
+        "quantity":"80g",
         "gotten":false,
         "price":0
     },
@@ -75,7 +75,7 @@
         "id":10,
         "item": "Pepper",
         "measurement": "g",
-        "quantity":80,
+        "quantity":"80g",
         "gotten":true,
         "price":10
     },
@@ -83,7 +83,7 @@
         "id":11,
         "item": "Pomp",
         "measurement": "g",
-        "quantity":100,
+        "quantity":"100g",
         "gotten":true,
         "price":40
     },
@@ -91,7 +91,7 @@
         "id":12,
         "item": "Ciler",
         "measurement": "g",
-        "quantity":300,
+        "quantity":"300g",
         "gotten":false,
         "price":0
     }

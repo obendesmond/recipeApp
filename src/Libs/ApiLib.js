@@ -2,6 +2,7 @@ import { API } from "aws-amplify";
 import recipes from '../Data/recipes.json';
 import ingredients from '../Data/ingredients.json';
 import menuData from '../Data/menu.json';
+import { appointmentData } from '../Data/data';
 
 
 // function to get all recipes
@@ -12,7 +13,7 @@ export const getRecipeList = () => {
 }
 
 // function to gett all ingredients from db
-export const getAllIngredients = () => {
+export const getAllIngredients = (gotten) => {
   return ingredients;
 
   // backend code to get all recipes from db
@@ -51,3 +52,37 @@ export const getMenuList = () => {
   return menuData;
   // api code to get menu data
 }
+
+// **********************************************
+const colors = ['#cb6bb2','#56ca85','#1e90ff']
+const recipesToBeModified = getRecipeList();
+const processRecipes = () => {
+  for (let i = 0; i < recipes.length; i++) {
+    recipes[i].id = recipes[i].recipeId;
+    recipes[i].text = recipes[i].title;
+    recipes[i].color = colors[Math.floor(Math.random() * Math.floor(3))]
+  }
+  return recipesToBeModified;
+}
+
+// return modified recipesData for appointment management
+export const recipesData = processRecipes();
+// data here represents appointments like appointmentData
+export const data =  appointmentData;
+export const priorityData = [
+  {
+    text: 'Break Fast',
+    id: 1,
+    color: '#1e90ff'
+  }, {
+    text: 'Launch',
+    id: 2,
+    color: '#ff9747'
+  },
+  {
+      text:'Supper',
+      id:3,
+      color:'#1e90ff'
+  }
+];
+// ***********************************************
